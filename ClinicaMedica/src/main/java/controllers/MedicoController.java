@@ -5,14 +5,8 @@ import java.util.List;
 
 import models.Medico;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import service.MedicoService;
 
@@ -30,11 +24,6 @@ public class MedicoController {
 
     }
 
-    @PutMapping
-    public Medico edit(@RequestBody Medico medico) throws Exception {
-
-        return medicoService.edit(medico);
-    }
 
     @GetMapping
     public List<Medico> findAll() throws Exception {
@@ -55,6 +44,31 @@ public class MedicoController {
 
         return medicoService.findByFilters(nome);
 
+    }
+
+    @GetMapping("/orderedByName")
+    public List<Medico> findAllMedicosOrderedByName() {
+
+        return medicoService.findAllMedicosNomeAsc();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> excluirMedico(@PathVariable Long id) {
+        try {
+            medicoService.excluir(id);
+            return ResponseEntity.ok("Médico excluido com sucesso"); //Se der certo retorna um 200
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage()); // Deu pau retorna 400
+        }
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<Medico> atualizarMedico(@PathVariable Long id, @RequestBody Medico medico) {
+        try {
+            Medico medicoAtualizado = medicoService.edit(id, medico);
+            return ResponseEntity.ok(medicoAtualizado);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
 

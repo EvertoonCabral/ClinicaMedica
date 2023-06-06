@@ -1,2 +1,6 @@
-package models;public enum EnumEspecialidade {
+package models;
+
+public enum EnumEspecialidade {
+
+    GINECOLOGIA, DERMATOLOGIA,  CARDIOLOGIA, ORTOPEDIA
 }
