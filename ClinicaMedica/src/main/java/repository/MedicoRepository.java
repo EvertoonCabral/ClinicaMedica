@@ -15,4 +15,6 @@ public interface MedicoRepository extends JpaRepository<Medico, Long> {
 
     List<Medico> findAllByOrderByNomeAsc();
 
+    List<Medico> findByAtivoTrue();
+
 }
