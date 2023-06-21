@@ -4,6 +4,7 @@ import br.unipar.clinicamedica.projection.PacienteProjection;
 import models.Paciente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 import repository.PacienteRepository;
 
 import java.util.List;
@@ -77,5 +78,7 @@ public class PacienteService {
             throw new Exception("Não é permitido alterar o CPF do paciente");
         }
     }
+
+
 }
 

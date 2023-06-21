@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import service.ConsultaService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/consultas")
 public class ConsultaController {
@@ -16,6 +18,7 @@ public class ConsultaController {
     }
 
     @PostMapping
+
     public ResponseEntity<?> agendarConsulta(@RequestBody Consulta consulta) {
         try {
             Consulta consultaAgendada = consultaService.agendarConsulta(consulta);
@@ -34,5 +37,22 @@ public class ConsultaController {
                 return ResponseEntity.badRequest().body(e.getMessage());
             }
         }
+
+
+
+    @GetMapping
+    @ApiOperation(value = "Obter uma lista de consultas")
+    public List<Consulta> findAll(){
+
+        return consultaService.findAll();
+    }
+
+    @GetMapping(path = "/{id}")
+    @ApiOperation(value = "Obter uma consulta pelo seu ID")
+    public Consulta findById(@PathVariable Long id) throws Exception {
+
+        return consultaService.findById(id);
+    }
+
     }
 

@@ -12,12 +12,14 @@ import service.MedicoService;
 
 @RestController
 @RequestMapping(path = "/marca")
+@Api(tags = "API Medico", description = "Medico")
 public class MedicoController {
 
     @Autowired
     private MedicoService medicoService;
 
     @PostMapping
+    //@ApiOperation(value = "Adicionar um medico")
     public Medico insert(@RequestBody Medico medico) throws Exception {
 
         return medicoService.insert(medico);
@@ -26,6 +28,7 @@ public class MedicoController {
 
 
     @GetMapping
+    //@ApiOperation(value = "Obter uma lista de medicos")
     public List<Medico> findAll() throws Exception {
 
         return medicoService.findAll();
@@ -33,6 +36,7 @@ public class MedicoController {
     }
 
     @GetMapping(path = "/{id}")
+    @ApiOperation(value = "Obter um medico pelo seu ID")
     public Medico findById(@PathVariable Long id) throws Exception {
 
         return medicoService.findById(id);
@@ -40,6 +44,7 @@ public class MedicoController {
     }
 
     @GetMapping(path = "/filter")
+    @ApiOperation(value = "Obter uma lista de medicos ordenados pelo nome")
     public List<Medico> findByFilters(@RequestParam("nome") String nome) throws Exception {
 
         return medicoService.findByFilters(nome);
@@ -47,12 +52,14 @@ public class MedicoController {
     }
 
     @GetMapping("/orderedByName")
+    @ApiOperation(value = "Obter uma lista de medicos ordenados pelo nome")
     public List<Medico> findAllMedicosOrderedByName() {
 
         return medicoService.findAllMedicosNomeAsc();
     }
 
     @DeleteMapping("/{id}")
+    @ApiOperation(value = "Excluir um medico")
     public ResponseEntity<String> excluirMedico(@PathVariable Long id) {
         try {
             medicoService.excluir(id);
@@ -62,6 +69,7 @@ public class MedicoController {
         }
     }
     @PutMapping("/{id}")
+    @ApiOperation( value = "Editar um medico")
     public ResponseEntity<Medico> atualizarMedico(@PathVariable Long id, @RequestBody Medico medico) {
         try {
             Medico medicoAtualizado = medicoService.edit(id, medico);

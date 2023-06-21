@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -27,6 +28,20 @@ public class ConsultaService {
         this.consultaRepository = consultaRepository;
         this.pacienteService = pacienteService;
         this.medicoService = medicoService;
+    }
+
+
+    public Consulta findById(Long id) throws Exception {
+        Optional<Consulta> retorno = consultaRepository.findById(id);
+
+        if (retorno.isPresent())
+            return retorno.get();
+        else
+            throw new Exception("Consulta com ID " + id + " Não Identificado");
+    }
+
+    public List<Consulta> findAll() {
+        return consultaRepository.findAll();
     }
 
     private boolean isHorarioFuncionamentoValido(LocalDateTime dataHora) {
@@ -46,13 +61,13 @@ public class ConsultaService {
     }
     public Consulta agendarConsulta(Consulta consulta) {
         try {
-            // Verificar se paciente está ativo
+
             Paciente paciente = consulta.getPaciente();
             if (paciente == null || !paciente.isAtivo()) {
                 throw new IllegalArgumentException("Paciente inativo ou não encontrado");
             }
 
-            // Verificar se médico está ativo
+
             Medico medico;
             Long idMedico = consulta.getMedico().getId();
             if (idMedico != null) {
@@ -61,7 +76,7 @@ public class ConsultaService {
                     throw new IllegalArgumentException("Médico inativo ou não encontrado");
                 }
             } else {
-                // Escolher aleatoriamente um médico ativo disponível na data/hora informada
+
                 medico = findRandomMedicoDisponivel(consulta.getDataHora());
                 if (medico == null) {
                     throw new IllegalArgumentException("Não há médicos disponíveis para a data/hora informada");
@@ -94,10 +109,9 @@ public class ConsultaService {
     }
 
     public Medico findRandomMedicoDisponivel(LocalDateTime dataHora) {
-        // Obtenha todos os médicos ativos
+
         List<Medico> medicosAtivos = medicoRepository.findByAtivoTrue();
 
-        // Filtrar médicos disponíveis na data/hora informada
         List<Medico> medicosDisponiveis = new ArrayList<>();
         for (Medico medico : medicosAtivos) {
             boolean disponivel = !consultaRepository.existsByMedicoAndDataHora(medico, dataHora);
